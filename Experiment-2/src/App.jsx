@@ -1,42 +1,66 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
-import ButtonBasic from './components/ButtonBasic';
+import { Container, Typography, Stack, Divider, Box } from "@mui/material";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+
+import ButtonComponent from "./components/Button";
+import RatingComponent from "./components/rating";
+import SelectComponent from "./components/select";
+import SwitchComponent from "./components/switch";
+import TextFieldComponent from "./components/textfield";
+
+import Home from "./components/home";
+import About from "./components/about";
+import Contact from "./components/contact";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+    <BrowserRouter>
+      <Container maxWidth="sm" sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Material UI Components Demo
+        </Typography>
 
-      <h1>Vite + React</h1>
+        {/* Navigation Links */}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-around",
+            mb: 3,
+          }}
+        >
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Typography sx={{ cursor: "pointer" }}>Home</Typography>
+          </Link>
 
-      <div className="card">
-        <button onClick={() => setCount(count + 1)}>
-          count is {count}
-        </button>
+          <Link to="/about" style={{ textDecoration: "none" }}>
+            <Typography sx={{ cursor: "pointer" }}>About</Typography>
+          </Link>
 
-        {/* ✅ MUI Button */}
-        <ButtonBasic />
+          <Link to="/contact" style={{ textDecoration: "none" }}>
+            <Typography sx={{ cursor: "pointer" }}>Contact</Typography>
+          </Link>
+        </Box>
 
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
+        <Divider />
 
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+        <Stack spacing={3} mt={3}>
+          {/* Experiment-2 Components (Always Visible) */}
+          <ButtonComponent />
+          <RatingComponent />
+          <SelectComponent />
+          <SwitchComponent />
+          <TextFieldComponent />
+        </Stack>
+
+        <Divider sx={{ my: 3 }} />
+
+        {/* Page Routes */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
+      </Container>
+    </BrowserRouter>
   );
 }
 
