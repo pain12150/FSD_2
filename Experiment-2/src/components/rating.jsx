@@ -1,35 +1,13 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Rating from '@mui/material/Rating';
-import Typography from '@mui/material/Typography';
-
-export default function BasicRating() {
-  const [value, setValue] = React.useState(2);
-
+import { useState } from "react";
+const Rating = ({ label }) => {
+  const [rating, setRating] = useState(0);
   return (
-    <Box sx={{ '& > legend': { mt: 2 } }}>
-      <Typography component="legend">Controlled</Typography>
-      <Rating
-        name="simple-controlled"
-        value={value}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      />
-      <Typography component="legend">Uncontrolled</Typography>
-      <Rating
-        name="simple-uncontrolled"
-        onChange={(event, newValue) => {
-          console.log(newValue);
-        }}
-        defaultValue={2}
-      />
-      <Typography component="legend">Read only</Typography>
-      <Rating name="read-only" value={value} readOnly />
-      <Typography component="legend">Disabled</Typography>
-      <Rating name="disabled" value={value} disabled />
-      <Typography component="legend">No rating given</Typography>
-      <Rating name="no-value" value={null} />
-    </Box>
+    <div style={{ marginBottom: "15px" }}>
+      <label style={{ display: "block", fontWeight: "bold", marginBottom: "5px" }}>{label}</label>
+      {[1, 2, 3, 4, 5].map(star => (
+        <span key={star} onClick={() => setRating(star)} style={{ cursor: "pointer", fontSize: "24px", color: star <= rating ? "gold" : "#ccc" }}>★</span>
+      ))}
+    </div>
   );
-}
+};
+export default Rating;

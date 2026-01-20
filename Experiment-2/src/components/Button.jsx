@@ -1,12 +1,6 @@
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-
-export default function BasicButtons() {
-  return (
-    <Stack spacing={2} direction="row">
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
-    </Stack>
-  );
-}
+const Button = ({ text, onClick }) => (
+  <button onClick={onClick} style={{ padding: "10px 20px", background: "#007bff", color: "#fff", border: "none", borderRadius: "5px", cursor: "pointer", marginTop: "10px" }}>
+    {text}
+  </button>
+);
+export default Button;
