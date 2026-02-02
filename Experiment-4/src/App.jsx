@@ -1,33 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import LocalStateCounter from './components/CounterLocalState'
+import CounterContextParent from './components/CounterGlobalContextParent'
+import CounterReduxParent from './components/CounterReduxParent'
+
+import { CounterContextProvider } from './components/context/CounterGlobalContextAPI'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <h2>Experiment 4: To demonstrate State Management</h2> 
+      <LocalStateCounter cno="1" />
+      <LocalStateCounter cno="2" />
+
+      <CounterContextProvider>
+        <CounterContextParent cno="1"/>
+        <CounterContextParent cno="2"/> 
+      </CounterContextProvider> 
+
+
+      <CounterReduxParent cno="1"/>
+      <CounterReduxParent cno="2"/>
     </>
   )
 }
