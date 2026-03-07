@@ -169,12 +169,6 @@ The backend API was deployed using **Render Cloud Platform**.
 
 ---
 
-## GitHub Repository
-
-**Repository Name:** FSD-II  
-**GitHub Username:** Bedant186  
-
----
 
 ## Live Deployment (Frontend Preview)
 
@@ -282,6 +276,7 @@ This experiment demonstrated how authentication can be implemented in REST APIs 
 
 ## Author
 
-**Bedant Singhania**
+**Jatin Kumar**
+
 
 Experiment 9 – Implement Authentication using Tokens
