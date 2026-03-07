@@ -1,25 +1,20 @@
-import os
-import base64
+# from flask import Flask, app, request, jsonify
+# from auth_routes import app as auth_app
+
 from flask import Flask, request, jsonify
 from flask_jwt_extended import (
     JWTManager, create_access_token,
     jwt_required, get_jwt_identity
 )
-from datetime import timedelta
+import base64
 
 app = Flask(__name__)
-
-# ================================
-# CONFIGURATION
-# ================================
-app.config["JWT_SECRET_KEY"] = os.environ.get("JWT_SECRET_KEY", "change-this-secret")
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+app.config["JWT_SECRET_KEY"] = "super-secret-key"
 
 jwt = JWTManager(app)
 
 # ================================
 # In-memory user store
-# (Use database in real production)
 # ================================
 users = {
     "admin": {
@@ -33,15 +28,7 @@ users = {
 }
 
 # ================================
-# HEALTH CHECK
-# ================================
-@app.route("/health")
-def health():
-    return jsonify({"status": "ok"}), 200
-
-
-# ================================
-# BASIC AUTHENTICATION
+# 1. BASIC AUTHENTICATION
 # ================================
 @app.route("/basic-protected")
 def basic_protected():
@@ -53,24 +40,19 @@ def basic_protected():
     user = users.get(auth.username)
 
     if user and user["password"] == auth.password:
-        return jsonify({
-            "message": f"Basic Auth Success",
-            "user": auth.username
-        })
+        return jsonify({"message": f"Basic Auth Success. Welcome {auth.username}!"})
 
     return jsonify({"error": "Invalid credentials"}), 401
 
 
 # ================================
-# SIMPLE TOKEN AUTH
+# 2. SIMPLE TOKEN AUTHENTICATION
 # ================================
+
+# Generate simple token (not JWT)
 @app.route("/token-login", methods=["POST"])
 def token_login():
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "Missing JSON body"}), 400
-
+    data = request.json
     username = data.get("username")
     password = data.get("password")
 
@@ -78,11 +60,7 @@ def token_login():
 
     if user and user["password"] == password:
         token = base64.b64encode(username.encode()).decode()
-
-        return jsonify({
-            "token": token,
-            "type": "simple"
-        })
+        return jsonify({"token": token})
 
     return jsonify({"error": "Invalid credentials"}), 401
 
@@ -96,29 +74,21 @@ def token_protected():
 
     try:
         username = base64.b64decode(token).decode()
-
         if username in users:
-            return jsonify({
-                "message": "Token Auth Success",
-                "user": username
-            })
-
-    except Exception:
+            return jsonify({"message": f"Token Auth Success. Welcome {username}!"})
+    except:
         pass
 
     return jsonify({"error": "Invalid Token"}), 401
 
 
 # ================================
-# JWT AUTHENTICATION
+# 3. JWT AUTHENTICATION
 # ================================
+
 @app.route("/jwt-login", methods=["POST"])
 def jwt_login():
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"error": "Missing JSON body"}), 400
-
+    data = request.json
     username = data.get("username")
     password = data.get("password")
 
@@ -126,11 +96,7 @@ def jwt_login():
 
     if user and user["password"] == password:
         token = create_access_token(identity=username)
-
-        return jsonify({
-            "access_token": token,
-            "type": "Bearer"
-        })
+        return jsonify({"access_token": token})
 
     return jsonify({"error": "Invalid credentials"}), 401
 
@@ -139,42 +105,26 @@ def jwt_login():
 @jwt_required()
 def jwt_protected():
     current_user = get_jwt_identity()
+    return jsonify({"message": f"JWT Auth Success. Welcome {current_user}!"})
 
-    return jsonify({
-        "message": "JWT Auth Success",
-        "user": current_user
-    })
 
 
 # ================================
-# ROOT
+# ROOT ROUTE
 # ================================
 @app.route("/")
 def home():
     return jsonify({
-        "message": "Authentication API Running",
-        "routes": {
-            "basic": "/basic-protected",
-            "token_login": "/token-login (POST)",
-            "token_protected": "/token-protected",
-            "jwt_login": "/jwt-login (POST)",
-            "jwt_protected": "/jwt-protected"
-        }
+        "message": "Authentication Experiment Running",
+        "routes": [
+            "/basic-protected (Basic Auth)",
+            "/token-login (POST)",
+            "/token-protected (x-auth-token header)",
+            "/jwt-login (POST)",
+            "/jwt-protected (Bearer Token)"
+        ]
     })
 
 
-# ================================
-# ERROR HANDLERS
-# ================================
-@app.errorhandler(404)
-def not_found(e):
-    return jsonify({"error": "Route not found"}), 404
-
-
-@app.errorhandler(500)
-def server_error(e):
-    return jsonify({"error": "Internal server error"}), 500
-
-
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0", port=5000, debug=True)
