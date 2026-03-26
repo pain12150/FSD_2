@@ -102,7 +102,7 @@ https://github.com/shantnu108/fsd-2-CU/tree/main/exp11
 ##  Learning Outcomes
 
 - Understood microservices architecture  
-- Learned service-to-service communication using APIs  
+- Learned service-to-service communication using API
 - Gained experience with RESTful API design  
 - Implemented error handling in distributed systems  
 - Learned deployment of backend services on cloud (Render)  
