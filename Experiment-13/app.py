@@ -57,6 +57,20 @@ with app.app_context():
 
 # ----------------- CRUD API Endpoints ----------------- #
 
+@app.route('/', methods=['GET'])
+def home():
+    """Root endpoint to verify the server is running."""
+    return jsonify({
+        "message": "Welcome to the Student CRUD API!",
+        "endpoints": {
+            "GET /students": "Fetch all students",
+            "POST /students": "Create a new student",
+            "GET /students/<id>": "Fetch a specific student",
+            "PUT /students/<id>": "Update a student",
+            "DELETE /students/<id>": "Delete a student"
+        }
+    }), 200
+
 @app.route('/students', methods=['POST'])
 def create_student():
     """Create a new student with validation"""
