@@ -1,0 +1,52 @@
+name: CI test complete pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          cd Experiment-14/backend
+          pip install -r requirements.txt
+
+      - name: Run Pytest
+        run: |
+          cd Experiment-14/backend
+          pytest tests/
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install Dependencies
+        run: |
+          cd Experiment-14/frontend
+          npm install
+
+      - name: Run Vitest
+        run: |
+          cd Experiment-14/frontend
+          npm run test -- --run

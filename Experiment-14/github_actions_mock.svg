@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400" style="background-color: #0d1117; font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+    <!-- GitHub Dark Theme Colors -->
+    <!-- Top Nav mock -->
+    <rect width="800" height="50" fill="#161b22"/>
+    <text x="20" y="32" fill="#c9d1d9" font-size="14" font-weight="600">User / Experiment-14</text>
+    
+    <!-- Title Area -->
+    <circle cx="30" cy="95" r="10" fill="#238636"/>
+    <path d="M26 95 L29 98 L35 91" stroke="white" stroke-width="2" fill="none"/>
+    <text x="50" y="100" fill="#c9d1d9" font-size="20" font-weight="600">CI test complete pipeline</text>
+    <text x="50" y="125" fill="#8b949e" font-size="13">#1 passed 2 minutes ago</text>
+
+    <!-- Sidebar with jobs -->
+    <rect x="20" y="160" width="220" height="180" fill="#161b22" rx="6" stroke="#30363d"/>
+    <text x="40" y="185" fill="#c9d1d9" font-size="14" font-weight="600">Jobs</text>
+    
+    <!-- Job 1 -->
+    <rect x="25" y="200" width="210" height="35" fill="#1f242c" rx="4"/>
+    <circle cx="45" cy="217" r="7" fill="#238636"/>
+    <path d="M42 217 L44 219 L49 214" stroke="white" stroke-width="1.5" fill="none"/>
+    <text x="65" y="222" fill="#c9d1d9" font-size="14">backend-test</text>
+    <text x="195" y="222" fill="#8b949e" font-size="12">14s</text>
+
+    <!-- Job 2 -->
+    <circle cx="45" cy="252" r="7" fill="#238636"/>
+    <path d="M42 252 L44 254 L49 249" stroke="white" stroke-width="1.5" fill="none"/>
+    <text x="65" y="257" fill="#c9d1d9" font-size="14">frontend-test</text>
+    <text x="195" y="257" fill="#8b949e" font-size="12">21s</text>
+
+    <!-- Main View area -->
+    <rect x="260" y="160" width="510" height="180" fill="#161b22" rx="6" stroke="#30363d"/>
+    <text x="280" y="190" fill="#c9d1d9" font-size="14" font-weight="bold">backend-test</text>
+    
+    <!-- Output logs mock -->
+    <g fill="#8b949e" font-size="13" font-family="'Courier New', Courier, monospace">
+        <text x="280" y="220">▶ Set up job</text>
+        <text x="280" y="240">▶ Checkout Code</text>
+        <text x="280" y="260">▶ Setup Python</text>
+        <text x="280" y="280">▶ Install Dependencies</text>
+        <text x="280" y="300" fill="#c9d1d9">▼ Run Pytest</text>
+        <text x="300" y="320" fill="#3fb950">✓ tests/test_app.py ... [100%]</text>
+    </g>
+</svg>
