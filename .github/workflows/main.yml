@@ -13,21 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install Dependencies
         run: |
-          cd Experiment-14/backend
+          cd Experiment-16/backend
           pip install -r requirements.txt
 
       - name: Run Pytest
         run: |
-          cd Experiment-14/backend
+          cd Experiment-16/backend
           pytest tests/
 
   frontend-test:
@@ -39,14 +39,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Install Dependencies
         run: |
-          cd Experiment-14/frontend
+          cd Experiment-16/frontend
           npm install
 
       - name: Run Vitest
         run: |
-          cd Experiment-14/frontend
+          cd Experiment-16/frontend
           npm run test -- --run
