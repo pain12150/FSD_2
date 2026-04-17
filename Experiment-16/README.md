@@ -43,3 +43,17 @@ The frontend is built with React and Vite. It contains a `ContactForm` component
 
 ## GitHub Actions
 The `.github/workflows/main.yml` file contains a configuration for running both backend and frontend tests automatically when code is pushed to the `main` branch.
+
+## Learning Outcomes 
+1) Understand Unit Testing Concepts (Learned the fundamentals of unit testing, including test cases, assertions, and test coverage for both backend and frontend applications.)
+
+2) Implement Backend Testing with Pytest (Gained hands-on experience writing and executing test cases for a Flask-based API using pytest.)
+
+3) Test Frontend Components using Vitest (Learned how to test React components (like ContactForm) using vitest and @testing-library/react.)
+
+4) Set Up and Use CI/CD with GitHub Actions (Understood how to automate testing workflows by configuring GitHub Actions to run tests on every push.)
+
+5) Improve Code Quality and Reliability (Developed skills to detect bugs early, ensure code correctness, and maintain robust full-stack applications through testing.)
+
+
+By Jatin UID 23BDA70054
