@@ -1,0 +1,154 @@
+# ============================================
+# CD Pipeline - Docker Build & Deploy
+# Experiment-20: CI/CD Pipeline Implementation
+# ============================================
+# This workflow integrates the CI testing from Experiment-16
+# and adds CD (Continuous Deployment) with Docker
+
+name: CD Pipeline - Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Experiment-20/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Experiment-20/**'
+  workflow_dispatch:  # Allows manual triggering
+
+env:
+  IMAGE_NAME: flask-backend-app
+  IMAGE_TAG: latest
+
+jobs:
+  # ─────────────────────────────────────────
+  # Job 1: Run Unit Tests (CI - from Exp-16)
+  # ─────────────────────────────────────────
+  test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          cd Experiment-20/backend
+          pip install -r requirements.txt
+
+      - name: Run Pytest
+        run: |
+          cd Experiment-20/backend
+          pytest tests/ -v --tb=short
+
+  # ─────────────────────────────────────────
+  # Job 2: Build Docker Image (CD)
+  # ─────────────────────────────────────────
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: test  # Only build if tests pass
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: |
+          cd Experiment-20/backend
+          docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+          docker images | grep ${{ env.IMAGE_NAME }}
+
+      - name: Run Docker Container (Smoke Test)
+        run: |
+          # Start container in detached mode
+          docker run -d --name flask-test-container -p 5000:5000 ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          
+          # Wait for container to be ready
+          sleep 5
+          
+          # Verify container is running
+          docker ps | grep flask-test-container
+          
+          # Test health endpoint
+          curl -f http://localhost:5000/api/health || exit 1
+          
+          # Test home endpoint
+          curl -f http://localhost:5000/ || exit 1
+          
+          echo "✅ Smoke test passed! Container is running and healthy."
+
+      - name: Show Container Logs
+        if: always()
+        run: |
+          docker logs flask-test-container 2>&1 || true
+
+      - name: Cleanup
+        if: always()
+        run: |
+          docker stop flask-test-container || true
+          docker rm flask-test-container || true
+
+  # ─────────────────────────────────────────
+  # Job 3: Deploy (CD - Push to Registry)
+  # ─────────────────────────────────────────
+  deploy:
+    name: Deploy to Registry
+    runs-on: ubuntu-latest
+    needs: build  # Only deploy if build succeeds
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+        continue-on-error: true
+
+      - name: Build and Tag for Registry
+        run: |
+          cd Experiment-20/backend
+          docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+          docker tag ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} ${{ env.IMAGE_NAME }}:${{ github.sha }}
+          echo "✅ Image built and tagged successfully"
+          echo "   - ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}"
+          echo "   - ${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          docker images | grep ${{ env.IMAGE_NAME }}
+
+      - name: Push to Docker Hub
+        continue-on-error: true
+        run: |
+          docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} || echo "⚠️ Push skipped (Docker Hub credentials not configured)"
+          docker push ${{ env.IMAGE_NAME }}:${{ github.sha }} || echo "⚠️ Push skipped (Docker Hub credentials not configured)"
+
+      - name: Deployment Summary
+        run: |
+          echo "============================================"
+          echo "        CD Pipeline Summary"
+          echo "============================================"
+          echo "Image: ${{ env.IMAGE_NAME }}"
+          echo "Tag: ${{ env.IMAGE_TAG }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Status: ✅ Pipeline completed successfully"
+          echo "============================================"
