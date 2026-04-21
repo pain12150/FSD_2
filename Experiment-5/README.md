@@ -6,3 +6,6 @@ Learning Outcome:
 4) Use BrowserRouter, Routes, Route, and Link for smooth navigation without page reload.
 5) Organize a React project using a component-based folder structure.
 6) Use Git and GitHub to manage and push the project code to a remote repository.
+
+
+By Jatin Kumar (23BDA70054)
