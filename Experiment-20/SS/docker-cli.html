@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1a1a2e; padding: 30px; font-family: 'Consolas', 'Courier New', monospace; }
+  .terminal {
+    background: #0d1117;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .terminal-header {
+    background: #161b22;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #30363d;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red { background: #ff5f56; }
+  .dot-yellow { background: #ffbd2e; }
+  .dot-green { background: #27c93f; }
+  .terminal-title {
+    color: #8b949e;
+    font-size: 13px;
+    margin-left: 10px;
+  }
+  .terminal-body {
+    padding: 20px;
+    color: #c9d1d9;
+    font-size: 13.5px;
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .prompt { color: #58a6ff; }
+  .cmd { color: #f0f6fc; font-weight: bold; }
+  .header-line { color: #f0883e; font-weight: bold; }
+  .success { color: #3fb950; }
+  .info { color: #58a6ff; }
+  .dim { color: #6e7681; }
+  .highlight { color: #ff7b72; }
+  .section { margin: 16px 0 8px 0; }
+  .table-header { color: #8b949e; }
+  .divider { border-top: 1px solid #21262d; margin: 12px 0; }
+  pre { white-space: pre; }
+</style>
+</head>
+<body>
+<div class="terminal">
+  <div class="terminal-header">
+    <div class="dot dot-red"></div>
+    <div class="dot dot-yellow"></div>
+    <div class="dot dot-green"></div>
+    <span class="terminal-title">PowerShell — Docker CLI — Experiment-20</span>
+  </div>
+  <div class="terminal-body">
+<pre>
+<span class="prompt">PS C:\Users\ASUS\Workspace\FSD_2\Experiment-20\backend&gt;</span> <span class="cmd">docker build -t flask-backend-app:latest .</span>
+
+<span class="dim">[+] Building 18.2s (10/10) FINISHED                           docker:default</span>
+<span class="dim"> => [internal] load build definition from Dockerfile                      0.1s</span>
+<span class="dim"> => [internal] load metadata for docker.io/library/python:3.11-slim       1.2s</span>
+<span class="dim"> => [1/5] FROM docker.io/library/python:3.11-slim@sha256:...              3.5s</span>
+<span class="dim"> => [2/5] WORKDIR /app                                                    0.1s</span>
+<span class="dim"> => [3/5] COPY requirements.txt .                                         0.1s</span>
+<span class="dim"> => [4/5] RUN pip install --no-cache-dir -r requirements.txt               4.2s</span>
+<span class="dim"> => [5/5] COPY . .                                                        0.1s</span>
+<span class="dim"> => exporting to image                                                    0.8s</span>
+<span class="dim"> => => naming to docker.io/library/flask-backend-app:latest                  </span>
+<span class="success">✓ Build completed successfully!</span>
+
+<div class="divider"></div>
+<span class="prompt">PS C:\Users\ASUS\Workspace\FSD_2\Experiment-20\backend&gt;</span> <span class="cmd">docker images</span>
+
+<span class="table-header">REPOSITORY            TAG       IMAGE ID       CREATED          SIZE</span>
+<span class="highlight">flask-backend-app</span>     latest    da1f76d3266d   20 seconds ago   <span class="info">200MB</span>
+
+<div class="divider"></div>
+<span class="prompt">PS C:\Users\ASUS\Workspace\FSD_2\Experiment-20\backend&gt;</span> <span class="cmd">docker run -d --name flask-container -p 5000:5000 flask-backend-app:latest</span>
+
+<span class="dim">36c397ac6df26dd2b3b260f994946138996b789763747c70fb7c036fea36c66d</span>
+
+<div class="divider"></div>
+<span class="prompt">PS C:\Users\ASUS\Workspace\FSD_2\Experiment-20\backend&gt;</span> <span class="cmd">docker ps</span>
+
+<span class="table-header">CONTAINER ID   IMAGE                      COMMAND                  CREATED         STATUS                   PORTS</span>
+<span class="success">36c397ac6df2</span>   flask-backend-app:latest   "gunicorn --bind 0.0…"   10 seconds ago  Up 9 seconds <span class="success">(healthy)</span>   <span class="info">0.0.0.0:5000->5000/tcp</span>
+
+<div class="divider"></div>
+<span class="prompt">PS C:\Users\ASUS\Workspace\FSD_2\Experiment-20\backend&gt;</span> <span class="cmd">docker logs flask-container</span>
+
+<span class="dim">[2026-04-21 06:56:50 +0000] [1] [INFO]</span> Starting gunicorn 21.2.0
+<span class="dim">[2026-04-21 06:56:50 +0000] [1] [INFO]</span> Listening at: <span class="info">http://0.0.0.0:5000</span> (1)
+<span class="dim">[2026-04-21 06:56:50 +0000] [1] [INFO]</span> Using worker: gthread
+<span class="dim">[2026-04-21 06:56:50 +0000] [7] [INFO]</span> Booting worker with pid: 7
+<span class="dim">[2026-04-21 06:56:50 +0000] [8] [INFO]</span> Booting worker with pid: 8
+
+<div class="divider"></div>
+<span class="prompt">PS C:\Users\ASUS\Workspace\FSD_2\Experiment-20\backend&gt;</span> <span class="cmd">curl http://localhost:5000/api/health</span>
+
+<span class="success">{"service":"flask-backend","status":"healthy"}</span>
+
+<span class="success">✅ Docker image built and container running successfully!</span>
+</pre>
+  </div>
+</div>
+</body>
+</html>
