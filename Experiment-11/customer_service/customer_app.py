@@ -17,9 +17,11 @@ def get_account_details(user_id):
         return jsonify({"error": "Customer not found"}), 404
 
     # Call Order Service
+    import os
+    order_svc_url = os.environ.get('ORDER_SERVICE_URL', 'http://localhost:5002')
     try:
         response = requests.get(
-            f"http://localhost:5002/orders/user/{user_id}",
+            f"{order_svc_url}/orders/user/{user_id}",
             timeout=3
         )
 
