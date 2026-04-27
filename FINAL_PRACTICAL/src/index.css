@@ -1,0 +1,42 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  padding: 0;
+}
+
+.app-container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-card {
+  border: 1px solid #ccc;
+  padding: 15px;
+}
+
+.product-image {
+  width: 200px;
+  height: auto;
+}
+
+.details-card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.details-image {
+  width: 300px;
+  height: auto;
+}
+
+button {
+  padding: 10px;
+  cursor: pointer;
+}
